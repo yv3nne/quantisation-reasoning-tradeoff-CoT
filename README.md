@@ -30,6 +30,7 @@ VLLM-compatible quantisation: GPTQ
 ![Architecture diagram](3_evaluation/figs/diagram_drawio.png)
 
 Inference engine: VLLM (with KVCache)
+
 Hardware: 1 × V100 GPU w 16 GB VRAM(cuda12.1, sm7.0) · 20 GB Debian 13 Trixie (OS) · 60 GB volume (holding the pipeline, deps, models and results), specified hardware runs ~2h 30min for N=100 samples per run.
 
 The repository is hereby structured as:
