@@ -1,0 +1,41 @@
+[project]
+name = "v100-gptq-env"
+version = "0.1.0"
+requires-python = "==3.10.*"
+dependencies = [
+    "gptqmodel>=2.0.0,<3.0.0",
+    "logbar",
+    "tokenicer",
+    "torch==2.4.0",
+    "torchvision==0.19.0",
+    "triton==2.1.0", # <=2.1.0 for volta gpus (sm_70)
+    "transformers>=4.51.0,<4.52.0",
+    "accelerate>=1.5.0",
+    "sentencepiece",
+    "numpy<2.0",
+    "psutil",
+    "datasets>=3.1.0",
+    "nbconvert>=7.16.0,<7.18.0",
+    "jupyter>=1.0.0,<2.0.0",
+    "threadpoolctl",
+    "device_smi",
+    "random_word"
+]
+
+[tool.uv]
+# torch==2.4.0+cu121 requires triton==3.0.0 but triton>2.1.0
+# lacks sm_70 (=volta) support which is why we must override
+# for keeping compatible version being triton==2.1.0.
+override-dependencies = ["triton==2.1.0"]
+
+[tool.uv.extra-build-dependencies]
+gptqmodel = ["pip", "torch==2.4.0"]
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+
+[tool.uv.sources]
+torch       = { index = "pytorch-cu121" }
+torchvision = { index = "pytorch-cu121" }

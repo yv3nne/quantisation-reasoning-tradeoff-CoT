@@ -1,0 +1,40 @@
+[project]
+name = "v100-inference-env"
+version = "0.1.0"
+requires-python = "==3.10.*"
+dependencies = [
+    "vllm==0.7.3", # compiled against torch==2.5, works with sm_70 (vllm0.12.0 needs torch2.9 and cuda12.9)
+    "torch==2.5.1", # 2.5.1+cu121 (see uv source)
+    "torchvision==0.20.1",
+    "xformers==0.0.28.post1", # torch==2.5 + sm_70 kernel support <=0.0.28.post1
+    "triton==2.1.0", # must stay <=2.1.0 for volta(sm_70)
+    "transformers>=4.45.0,<5.0.0",
+    "accelerate>=0.34.0,<1.0.0",
+    "sentencepiece",
+    "numpy<2.0",
+    "psutil",
+    "aiohttp",
+    "requests",
+    "nbconvert>=7.16.0,<7.18.0",
+    "jupyter>=1.0.0,<2.0.0",
+    "datasets>=2.16.0,<3.0.0",
+    "evaluate>=0.4.0",
+    "scikit-learn>=1.3.0",
+    "rouge-score",
+    "nltk",
+    "kaggle>=1.6.0",
+]
+
+[tool.uv]
+environments = ["sys_platform == 'linux'"] # no vllm/xformers wheels for macos
+# torch 2.5.1+cu121 wants triton==3.0.0, though must be triton>2.1.0 for sm70
+override-dependencies = ["torch==2.5.1", "torchvision==0.20.1", "xformers==0.0.28.post1", "triton==2.1.0"]
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu121" }
+torchvision = { index = "pytorch-cu121" }
